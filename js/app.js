@@ -23,7 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   ];
 
-  // Forzar siempre la lectura de los trabajos oficiales
   let posts = INITIAL_POSTS;
   localStorage.setItem('academic_posts', JSON.stringify(posts));
 
@@ -47,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let currentFilter = 'Todos';
 
-  // ABRIR ARCHIVOS PDF
+  // FUNCIÓN PARA ABRIR PDF
   window.openPdf = function(index) {
     const post = posts[index];
     if (!post || !post.pdfUrl) {
@@ -75,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // CARGAR CAJA DE COMENTARIOS EN VIVO (GISCUS)
+  // INYECCIÓN DIRECTA DE IFRAME DE GISCUS EN CADA TARJETA
   function loadGiscusComments(filteredPosts) {
     filteredPosts.forEach((post, index) => {
       const container = document.getElementById(`giscus-container-${index}`);
@@ -83,24 +82,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
       container.innerHTML = ''; 
 
-      const script = document.createElement('script');
-      script.src = "https://giscus.app/client.js";
-      script.setAttribute('data-repo', "ejmacedoma-ui/ej.-bitacora-fisi");
-      script.setAttribute('data-repo-id', "R_kgDOUWGogA");
-      script.setAttribute('data-category', "Announcements");
-      script.setAttribute('data-category-id', "DIC_kwDOUWGogM4DFWvB");
-      script.setAttribute('data-mapping', "specific");
-      script.setAttribute('data-term', post.title || `Publicacion-${index}`);
-      script.setAttribute('data-strict', "0");
-      script.setAttribute('data-reactions-enabled', "1");
-      script.setAttribute('data-emit-metadata', "0");
-      script.setAttribute('data-input-position', "bottom");
-      script.setAttribute('data-theme', "light");
-      script.setAttribute('data-lang', "es");
-      script.setAttribute('crossorigin', "anonymous");
-      script.async = true;
+      const iframe = document.createElement('iframe');
+      const term = post.title || `Publicacion-${index}`;
+      
+      const params = new URLSearchParams({
+        origin: window.location.href,
+        repo: "ejmacedoma-ui/ej.-bitacora-fisi",
+        repoId: "R_kgDOUWGogA",
+        category: "Announcements",
+        categoryId: "DIC_kwDOUWGogM4DFWvB",
+        mapping: "specific",
+        term: term,
+        strict: "0",
+        reactionsEnabled: "1",
+        emitMetadata: "0",
+        inputPosition: "bottom",
+        theme: "light",
+        lang: "es"
+      });
 
-      container.appendChild(script);
+      iframe.src = `https://giscus.app/es/widget?${params.toString()}`;
+      iframe.style.width = "100%";
+      iframe.style.height = "390px";
+      iframe.style.border = "none";
+      iframe.style.borderRadius = "8px";
+      iframe.loading = "lazy";
+
+      container.appendChild(iframe);
     });
   }
 
@@ -154,7 +162,6 @@ document.addEventListener('DOMContentLoaded', () => {
     loadGiscusComments(filtered);
   }
 
-  // EVENTOS Y FILTROS
   if (openBtn && modal) {
     openBtn.addEventListener('click', (e) => {
       e.preventDefault();
