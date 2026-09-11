@@ -1,15 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
   const ADMIN_PASSWORD = '1234';
 
-  // TRABAJOS PÚBLICOS POR DEFECTO
-const INITIAL_POSTS = [
+  // 📌 LISTA OFICIAL DE TRABAJOS PUBLICADOS
+  const INITIAL_POSTS = [
     {
       title: "Percepción sobre la falta de impresoras de cortado laser y 3D en la FISI-UNSM-Perú",
       unit: "Unidad I",
       type: "MAPA MENTAL",
       course: "Teoría General de Sistemas",
       summary: "En el presente trabajo doy mi punto de vista sobre la falta de impresoras de cortado laser y 3D en la FISI.",
-      pdfUrl: "tarea sobre la percepción.pdf",
+      pdfUrl: "tarea sobre la percepción.pdf", // Nombre del archivo PDF subido a GitHub
       date: "10 SET. 2026"
     },
     {
@@ -18,14 +18,17 @@ const INITIAL_POSTS = [
       type: "INFORME",
       course: "Teoría General de Sistemas",
       summary: "Estudio de una pollería como sistema abierto bajo la TGS: entradas, procesos, salidas, subsistemas, entorno y retroalimentación.",
-      pdfUrl: "Análisis de Sistemas - Pollería.pdf", // Nombre exacto del PDF que subiste a GitHub
+      pdfUrl: "Análisis de Sistemas - Pollería.pdf", // Nombre del archivo PDF subido a GitHub
       date: "11 SET. 2026"
     }
   ];
 
+  // Forzar siempre la lectura de los trabajos oficiales
+  let posts = INITIAL_POSTS;
+  localStorage.setItem('academic_posts', JSON.stringify(posts));
+
   const modal = document.getElementById('newPostDialog');
   const openBtn = document.getElementById('openModalBtn');
-  const newPostForm = document.getElementById('newPostForm');
   const postCountElem = document.getElementById('post-count');
 
   function updateCounter() {
@@ -44,7 +47,7 @@ const INITIAL_POSTS = [
 
   let currentFilter = 'Todos';
 
-  // FUNCIÓN PARA ABRIR PDF
+  // ABRIR ARCHIVOS PDF
   window.openPdf = function(index) {
     const post = posts[index];
     if (!post || !post.pdfUrl) {
@@ -72,7 +75,7 @@ const INITIAL_POSTS = [
     }
   };
 
-  // INYECCIÓN DINÁMICA DE GISCUS EN CADA TARJETA
+  // CARGAR CAJA DE COMENTARIOS EN VIVO (GISCUS)
   function loadGiscusComments(filteredPosts) {
     filteredPosts.forEach((post, index) => {
       const container = document.getElementById(`giscus-container-${index}`);
@@ -101,7 +104,7 @@ const INITIAL_POSTS = [
     });
   }
 
-  // RENDERIZAR PUBLICACIONES
+  // RENDERIZAR TARJETAS EN PANTALLA
   function renderPosts(filterCategory = currentFilter) {
     currentFilter = filterCategory;
     const container = document.getElementById('postsGrid');
@@ -141,7 +144,6 @@ const INITIAL_POSTS = [
             }
           </div>
 
-          <!-- CONTENEDOR EN VIVO DE GISCUS -->
           <div class="comments-box" style="border-top: 1px solid #e0e0e0; padding-top: 10px; margin-top: 10px;">
             <div id="giscus-container-${index}"></div>
           </div>
@@ -149,11 +151,10 @@ const INITIAL_POSTS = [
       `;
     }).join('');
 
-    // Cargar hilos de comentarios reales en tiempo real
     loadGiscusComments(filtered);
   }
 
-  // ADMINISTRACIÓN Y EVENTOS
+  // EVENTOS Y FILTROS
   if (openBtn && modal) {
     openBtn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -173,50 +174,6 @@ const INITIAL_POSTS = [
       if (modal) modal.close();
     });
   });
-
-  const fileToBase64 = file => new Promise((resolve, reject) => {
-    if (!file || file.size === 0) return resolve(null);
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
-  });
-
-  if (newPostForm) {
-    newPostForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const formData = new FormData(newPostForm);
-      const pdfFile = formData.get('pdfDocument');
-
-      let pdfUrl = null;
-      if (pdfFile && pdfFile.size > 0) {
-        try {
-          pdfUrl = await fileToBase64(pdfFile);
-        } catch (err) {
-          console.error("Error procesando PDF:", err);
-        }
-      }
-
-      const newPost = {
-        title: formData.get('title') || '',
-        unit: formData.get('unit') || 'Unidad I',
-        type: formData.get('type') || 'Informe',
-        course: formData.get('course') || '',
-        summary: formData.get('summary') || '',
-        pdfUrl: pdfUrl,
-        date: new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase()
-      };
-
-      posts.unshift(newPost);
-      localStorage.setItem('academic_posts', JSON.stringify(posts));
-
-      updateCounter();
-      renderPosts(currentFilter);
-
-      if (modal) modal.close();
-      newPostForm.reset();
-    });
-  }
 
   const filterButtons = document.querySelectorAll('.filters button, .unit-btn, [data-filter]');
   filterButtons.forEach(btn => {
