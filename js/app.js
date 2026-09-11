@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
   const ADMIN_PASSWORD = '1234';
 
-  // 📌 LISTA OFICIAL DE TRABAJOS PUBLICADOS
-  const INITIAL_POSTS = [
+  // 📌 CADA TRABAJO TIENE UN ID ÚNICO PARA QUE GISCUS SEPA EN QUÉ HILO GUARDAR SUS COMENTARIOS
+   const INITIAL_POSTS = [
     {
       title: "Percepción sobre la falta de impresoras de cortado laser y 3D en la FISI-UNSM-Perú",
       unit: "Unidad I",
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let currentFilter = 'Todos';
 
-  // FUNCIÓN PARA ABRIR PDF
+  // ABRIR PDF
   window.openPdf = function(index) {
     const post = posts[index];
     if (!post || !post.pdfUrl) {
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // INYECCIÓN DIRECTA DE IFRAME DE GISCUS EN CADA TARJETA
+  // 📌 CARGA UN GISCUS INDEPENDIENTE PARA CADA TRABAJO USANDO SU ID ÚNICO
   function loadGiscusComments(filteredPosts) {
     filteredPosts.forEach((post, index) => {
       const container = document.getElementById(`giscus-container-${index}`);
@@ -82,17 +82,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
       container.innerHTML = ''; 
 
+      // Se asigna el ID único de la publicación como término de búsqueda
+      const termIdentifier = post.id || post.title || `publicacion-${index}`;
+
       const iframe = document.createElement('iframe');
-      const term = post.title || `Publicacion-${index}`;
-      
       const params = new URLSearchParams({
-        origin: window.location.href,
+        origin: window.location.origin,
         repo: "ejmacedoma-ui/ej.-bitacora-fisi",
         repoId: "R_kgDOUWGogA",
         category: "Announcements",
         categoryId: "DIC_kwDOUWGogM4DFWvB",
         mapping: "specific",
-        term: term,
+        term: termIdentifier,
         strict: "0",
         reactionsEnabled: "1",
         emitMetadata: "0",
@@ -103,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       iframe.src = `https://giscus.app/es/widget?${params.toString()}`;
       iframe.style.width = "100%";
-      iframe.style.height = "390px";
+      iframe.style.height = "380px";
       iframe.style.border = "none";
       iframe.style.borderRadius = "8px";
       iframe.loading = "lazy";
@@ -136,23 +137,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     container.innerHTML = filtered.map((post, index) => {
       return `
-        <article class="post-card">
-          <div class="post-header">
-            <span class="post-type">${post.type || 'TRABAJO'}</span>
-            <span class="post-date">${post.date || 'Reciente'}</span>
-          </div>
-          <small class="post-course">${post.course || ''}</small>
-          <h3>${post.title || 'Sin título'}</h3>
-          <p>${post.summary || ''}</p>
+        <article class="post-card" style="display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div class="post-header">
+              <span class="post-type">${post.type || 'TRABAJO'}</span>
+              <span class="post-date">${post.date || 'Reciente'}</span>
+            </div>
+            <small class="post-course">${post.course || ''}</small>
+            <h3>${post.title || 'Sin título'}</h3>
+            <p>${post.summary || ''}</p>
 
-          <div class="post-footer" style="margin-bottom: 12px;">
-            ${post.pdfUrl 
-              ? `<button type="button" onclick="openPdf(${index})" class="read-more" style="background:none; border:none; padding:0; cursor:pointer; font:inherit; color:#6d0821; font-weight:bold; text-decoration:underline;">Abrir PDF 📄</button>`
-              : `<span class="read-more" style="opacity:0.5;">Sin PDF</span>`
-            }
+            <div class="post-footer" style="margin-bottom: 12px;">
+              ${post.pdfUrl 
+                ? `<button type="button" onclick="openPdf(${index})" class="read-more" style="background:none; border:none; padding:0; cursor:pointer; font:inherit; color:#6d0821; font-weight:bold; text-decoration:underline;">Abrir PDF 📄</button>`
+                : `<span class="read-more" style="opacity:0.5;">Sin PDF</span>`
+              }
+            </div>
           </div>
 
-          <div class="comments-box" style="border-top: 1px solid #e0e0e0; padding-top: 10px; margin-top: 10px;">
+          <!-- CONTENEDOR INDIVIDUAL DE COMENTARIOS -->
+          <div class="comments-box" style="border-top: 1px solid #e0e0e0; padding-top: 10px; margin-top: 10px; background: #fafafa; border-radius: 8px; padding: 10px;">
             <div id="giscus-container-${index}"></div>
           </div>
         </article>
@@ -162,6 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadGiscusComments(filtered);
   }
 
+  // MODAL Y PUBLICACIONES NUEVAS
   if (openBtn && modal) {
     openBtn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -181,6 +186,35 @@ document.addEventListener('DOMContentLoaded', () => {
       if (modal) modal.close();
     });
   });
+
+  const newPostForm = document.getElementById('newPostForm');
+  if (newPostForm) {
+    newPostForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(newPostForm);
+
+      // Genera automáticamente un ID único para los comentarios del nuevo trabajo
+      const newPost = {
+        id: "trabajo-" + Date.now(),
+        title: formData.get('title') || 'Publicación',
+        unit: formData.get('unit') || 'Unidad I',
+        type: formData.get('type') || 'Informe',
+        course: formData.get('course') || '',
+        summary: formData.get('summary') || '',
+        pdfUrl: null,
+        date: new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase()
+      };
+
+      posts.unshift(newPost);
+      localStorage.setItem('academic_posts', JSON.stringify(posts));
+
+      updateCounter();
+      renderPosts(currentFilter);
+
+      if (modal) modal.close();
+      newPostForm.reset();
+    });
+  }
 
   const filterButtons = document.querySelectorAll('.filters button, .unit-btn, [data-filter]');
   filterButtons.forEach(btn => {
