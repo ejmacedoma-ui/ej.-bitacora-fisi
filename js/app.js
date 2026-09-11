@@ -9,7 +9,7 @@ const INITIAL_POSTS = [
       type: "MAPA MENTAL",
       course: "Teoría General de Sistemas",
       summary: "En el presente trabajo doy mi punto de vista sobre la falta de impresoras de cortado laser y 3D en la FISI.",
-      pdfUrl: "informe1.pdf",
+      pdfUrl: "tarea sobre la percepción.pdf",
       date: "10 SET. 2026"
     },
     {
@@ -18,7 +18,7 @@ const INITIAL_POSTS = [
       type: "INFORME",
       course: "Teoría General de Sistemas",
       summary: "Estudio de una pollería como sistema abierto bajo la TGS: entradas, procesos, salidas, subsistemas, entorno y retroalimentación.",
-      pdfUrl: "analisis_polleria.pdf", // Nombre exacto del PDF que subiste a GitHub
+      pdfUrl: "Análisis de Sistemas - Pollería.pdf", // Nombre exacto del PDF que subiste a GitHub
       date: "11 SET. 2026"
     }
   ];
