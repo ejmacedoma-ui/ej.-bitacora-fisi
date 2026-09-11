@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const ADMIN_PASSWORD = '1234';
 
-  // 📌 LÍNEAS 4 - 16: TRABAJOS PÚBLICOS POR DEFECTO
+  // TRABAJOS PÚBLICOS POR DEFECTO
   const INITIAL_POSTS = [
     {
       title: "Percepción sobre la falta de impresoras de cortado laser y 3D en la FISI-UNSM-Perú",
@@ -9,13 +9,11 @@ document.addEventListener('DOMContentLoaded', () => {
       type: "MAPA MENTAL",
       course: "Teoría General de Sistemas",
       summary: "En el presente trabajo doy mi punto de vista sobre la falta de impresoras de cortado laser y 3D en la FISI.",
-      pdfUrl: "tarea sobre la percepción.pdf", // Nombre exacto del PDF que subiste a GitHub
-      comments: [],
+      pdfUrl: "informe1.pdf", // Nombre exacto de tu PDF en GitHub
       date: "10 SET. 2026"
     }
   ];
 
-  // Cargar publicaciones del navegador o establecer las iniciales
   let posts = JSON.parse(localStorage.getItem('academic_posts'));
   if (!posts || posts.length === 0) {
     posts = INITIAL_POSTS;
@@ -43,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let currentFilter = 'Todos';
 
-  // 📌 LÍNEAS 43 - 75: FUNCIÓN PARA ABRIR PDFS (Locales de GitHub y Base64)
+  // FUNCIÓN PARA ABRIR PDF
   window.openPdf = function(index) {
     const post = posts[index];
     if (!post || !post.pdfUrl) {
@@ -51,13 +49,11 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Abre el archivo PDF subido directamente a tu repositorio en GitHub
     if (!post.pdfUrl.startsWith('data:')) {
       window.open(post.pdfUrl, '_blank');
       return;
     }
 
-    // Abre el archivo procesado dinámicamente si proviene del navegador
     try {
       const parts = post.pdfUrl.split(';base64,');
       const contentType = parts[0].replace('data:', '') || 'application/pdf';
@@ -73,29 +69,36 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  window.addComment = function(index) {
-    const authorInput = document.getElementById(`comment-author-${index}`);
-    const textInput = document.getElementById(`comment-input-${index}`);
+  // INYECCIÓN DINÁMICA DE GISCUS EN CADA TARJETA
+  function loadGiscusComments(filteredPosts) {
+    filteredPosts.forEach((post, index) => {
+      const container = document.getElementById(`giscus-container-${index}`);
+      if (!container) return;
 
-    if (!textInput || !textInput.value.trim()) return;
+      container.innerHTML = ''; 
 
-    const author = (authorInput && authorInput.value.trim()) ? authorInput.value.trim() : 'Lector';
-    const text = textInput.value.trim();
+      const script = document.createElement('script');
+      script.src = "https://giscus.app/client.js";
+      script.setAttribute('data-repo', "ejmacedoma-ui/ej.-bitacora-fisi");
+      script.setAttribute('data-repo-id', "R_kgDOUWGogA");
+      script.setAttribute('data-category', "Announcements");
+      script.setAttribute('data-category-id', "DIC_kwDOUWGogM4DFWvB");
+      script.setAttribute('data-mapping', "specific");
+      script.setAttribute('data-term', post.title || `Publicacion-${index}`);
+      script.setAttribute('data-strict', "0");
+      script.setAttribute('data-reactions-enabled', "1");
+      script.setAttribute('data-emit-metadata', "0");
+      script.setAttribute('data-input-position', "bottom");
+      script.setAttribute('data-theme', "light");
+      script.setAttribute('data-lang', "es");
+      script.setAttribute('crossorigin', "anonymous");
+      script.async = true;
 
-    if (!posts[index].comments) {
-      posts[index].comments = [];
-    }
-
-    posts[index].comments.push({
-      author: author,
-      text: text,
-      date: new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'short' })
+      container.appendChild(script);
     });
+  }
 
-    localStorage.setItem('academic_posts', JSON.stringify(posts));
-    renderPosts(currentFilter);
-  };
-
+  // RENDERIZAR PUBLICACIONES
   function renderPosts(filterCategory = currentFilter) {
     currentFilter = filterCategory;
     const container = document.getElementById('postsGrid');
@@ -118,13 +121,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (emptyState) emptyState.style.display = 'none';
 
     container.innerHTML = filtered.map((post, index) => {
-      const comments = post.comments || [];
-      const commentsHtml = comments.map(c => `
-        <div style="font-size: 0.8rem; background: #f8f9fa; padding: 6px 10px; border-radius: 6px; margin-top: 4px; border: 1px solid #eee; color: #333;">
-          <strong>${c.author || 'Lector'}:</strong> ${c.text} <span style="opacity: 0.5; font-size: 0.75rem; float: right;">${c.date}</span>
-        </div>
-      `).join('');
-
       return `
         <article class="post-card">
           <div class="post-header">
@@ -142,33 +138,23 @@ document.addEventListener('DOMContentLoaded', () => {
             }
           </div>
 
+          <!-- CONTENEDOR EN VIVO DE GISCUS -->
           <div class="comments-box" style="border-top: 1px solid #e0e0e0; padding-top: 10px; margin-top: 10px;">
-            <div style="font-size: 0.8rem; font-weight: bold; color: #555; margin-bottom: 6px;">
-              💬 Comentarios (${comments.length})
-            </div>
-
-            <div style="max-height: 100px; overflow-y: auto; margin-bottom: 8px;">
-              ${commentsHtml || '<p style="font-size:0.75rem; color:#888; margin:0;">Sé el primero en comentar.</p>'}
-            </div>
-
-            <div style="display: flex; flex-direction: column; gap: 6px;">
-              <div style="display: flex; gap: 6px;">
-                <input type="text" id="comment-author-${index}" placeholder="Tu nombre..." style="width: 35%; padding: 6px 10px; font-size: 0.8rem; border: 1px solid #ccc; border-radius: 6px; outline: none;">
-                <input type="text" id="comment-input-${index}" placeholder="Escribe un comentario..." style="flex: 1; padding: 6px 10px; font-size: 0.8rem; border: 1px solid #ccc; border-radius: 6px; outline: none;">
-              </div>
-              <button type="button" onclick="addComment(${index})" style="padding: 6px 12px; font-size: 0.8rem; background: #6d0821; color: #ffffff; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; align-self: flex-end;">Enviar</button>
-            </div>
+            <div id="giscus-container-${index}"></div>
           </div>
         </article>
       `;
     }).join('');
+
+    // Cargar hilos de comentarios reales en tiempo real
+    loadGiscusComments(filtered);
   }
 
+  // ADMINISTRACIÓN Y EVENTOS
   if (openBtn && modal) {
     openBtn.addEventListener('click', (e) => {
       e.preventDefault();
       const inputPass = prompt("Ingresa la clave de administrador para agregar contenido:");
-      
       if (inputPass === ADMIN_PASSWORD) {
         modal.showModal();
       } else if (inputPass !== null) {
@@ -184,17 +170,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (modal) modal.close();
     });
   });
-
-  if (modal) {
-    modal.addEventListener('click', (e) => {
-      const rect = modal.getBoundingClientRect();
-      const clickedInside = (
-        rect.top <= e.clientY && e.clientY <= rect.bottom &&
-        rect.left <= e.clientX && e.clientX <= rect.right
-      );
-      if (!clickedInside) modal.close();
-    });
-  }
 
   const fileToBase64 = file => new Promise((resolve, reject) => {
     if (!file || file.size === 0) return resolve(null);
@@ -226,7 +201,6 @@ document.addEventListener('DOMContentLoaded', () => {
         course: formData.get('course') || '',
         summary: formData.get('summary') || '',
         pdfUrl: pdfUrl,
-        comments: [],
         date: new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase()
       };
 
