@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Blog académico de Esteban Joell Macedo Machahuay · Universidad Nacional de San Martín · FISI">
+<meta name="theme-color" content="#176b52">
+<title>Blog académico | Esteban Joell Macedo Machahuay</title>
+
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div id="progress"></div>
+
+<header class="site-header">
+    <div class="container navbar">
+      <a class="brand" href="#inicio">
+        <div class="brand-copy">
+          <strong>Archivo Académico</strong>
+          <small>UNSM · FISI · 2026-II</small>
+        </div>
+      </a>
+
+      <button class="menu-toggle" id="menuToggle" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="nav-links" id="mobileNav">
+        <a href="#inicio">Inicio</a>
+        <a href="#publicaciones">Publicaciones</a>
+        <a href="#perfil">Perfil</a>
+      </nav>
+
+      <a class="primary-action" href="#publicaciones" id="openModalBtn">＋ Nueva entrada</a>
+    </div>
+  </header>
+
+ <main>
+ <section class="hero" id="inicio" style="padding: 40px 0;">
+      <div class="container hero-grid" style="display: grid; grid-template-columns: 1fr 340px; gap: 32px; align-items: start;">
+        <div>
+          <div class="badge">Bitácora universitaria</div>
+          <h1>Ideas, trabajos y <em>aprendizajes</em> en una sola bitácora.</h1>
+          <p>Un espacio personal para organizar trabajos de clase, documentar procesos y compartir resultados de mi formación en Ingeniería de Sistemas e Informática.</p>
+          <div class="hero-actions" style="margin-top: 20px;">
+            <a class="btn-hero-primary" href="#publicaciones">Explorar trabajos</a>
+            <a class="btn-hero-secondary" href="#perfil">Conocer el perfil</a>
+          </div>
+        </div>
+
+        <aside class="profile-card" id="perfil" style="background: #0f5838; color: #ffffff; padding: 24px; border-radius: 20px;">
+          <div class="profile-top" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <span class="uni-chip" style="display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: bold;"><img src="unsm2.png" alt="UNSM" style="height: 20px; width: auto;"> UNSM</span>
+            <span class="uni-chip" style="display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: bold;"><img src="usnm.png" alt="FISI" style="height: 20px; width: auto;"> FISI</span>
+          </div>
+
+          <h2 style="color: #ffffff; margin-bottom: 8px;">Esteban Joell Macedo Machahuay</h2>
+          <p style="color: rgba(255,255,255,0.8); font-size: 0.9rem; margin-bottom: 24px;">Estudiante de Ingeniería de Sistemas e Informática</p>
+
+          <div class="profile-meta" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 16px;">
+            <div><span style="display:block; font-size: 0.75rem; opacity: 0.8;">Ciclo</span><strong>IV</strong></div>
+            <div><span style="display:block; font-size: 0.75rem; opacity: 0.8;">Periodo</span><strong>2026-II</strong></div>
+            <div><span style="display:block; font-size: 0.75rem; opacity: 0.8;">Universidad</span><strong>UNSM</strong></div>
+            <div><span style="display:block; font-size: 0.75rem; opacity: 0.8;">Publicaciones</span><strong id="post-count">1</strong></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+  <div class="container">
+    <div class="rule-title"><div><div class="badge">Publicaciones recientes</div><h2 class="section-title">Cuaderno de trabajos</h2><p class="section-lead">Selecciona una categoría, busca por curso o abre cualquier entrada para leerla y dejar un comentario.</p></div><div class="number">01</div></div>
+ <div class="filters"><button class="active" data-filter="Todos">Todas las unidades</button><button data-filter="Unidad I">Unidad I</button><button data-filter="Unidad II">Unidad II</button><button data-filter="Unidad III">Unidad III</button></div>
+    <div class="posts-grid" id="postsGrid"></div><div class="empty" id="emptyState" hidden>No se encontraron publicaciones.</div>
+  </div>
+</section>
+<section class="section" style="background:#efeae0">
+  <div class="container"><div class="badge">Propósito</div><h2 class="section-title">Más que almacenar archivos.</h2><div class="about-grid"><div class="about-item"><b>Documentar</b><p>Registrar el proceso de aprendizaje y conservar los trabajos con contexto.</p></div><div class="about-item"><b>Compartir</b><p>Presentar resultados en un formato claro, ordenado y accesible.</p></div><div class="about-item"><b>Mejorar</b><p>Recibir comentarios que ayuden a fortalecer cada entrega académica.</p></div></div></div>
+</section>
+</main>
+<footer><div class="container footer-inner"><span>© <span id="year"></span> · Esteban Joell Macedo Machahuay</span><span>Universidad Nacional de San Martín · FISI</span></div></footer>
+
+<dialog id="articleDialog" class="dialog">
+  <div class="dialog-shell article-dialog-shell">
+    <button class="dialog-close" data-close-dialog aria-label="Cerrar">×</button>
+    <div class="article-kicker" id="articleType">Publicación</div>
+    <h2 id="articleTitle">Título</h2>
+    <div class="article-course" id="articleCourse"></div>
+    <p class="article-summary" id="articleSummary"></p>
+    <iframe id="articlePdf" style="width:100%; height:450px; border:1px solid #ddd; border-radius:12px; margin-bottom: 20px;" hidden></iframe>
+    <div class="tags article-tags" id="articleTags"></div>
+    <div class="article-divider"></div>
+    <h3>Comentarios y aportes</h3>
+    <form id="commentForm" class="comment-form">
+      <input name="name" placeholder="Tu nombre" maxlength="60">
+      <textarea name="text" required maxlength="500" placeholder="Escribe una opinión, sugerencia o pregunta..."></textarea>
+      <button class="primary-action" type="submit">Publicar comentario</button>
+    </form>
+    <div id="commentsList" class="comments-list"></div>
+  </div>
+</dialog>
+
+<dialog id="newPostDialog" class="dialog">
+  <form id="newPostForm" class="dialog-shell">
+    <button type="button" class="dialog-close" data-close-dialog aria-label="Cerrar">×</button>
+    <div class="article-kicker">Panel del estudiante</div>
+    <h2>Nueva entrada académica</h2>
+    <p class="muted">Esta versión guarda la entrada en el navegador para que puedas probar la interfaz sin configurar una base de datos.</p>
+    <label>Título<input name="title" required maxlength="110" placeholder="Título del trabajo"></label>
+   <div class="form-row">
+  <label>Unidad
+    <select name="unit">
+      <option>Unidad I</option>
+      <option>Unidad II</option>
+      <option>Unidad III</option>
+    </select>
+  </label>
+  <label>Tipo
+    <select name="type">
+      <option>Informe</option><option>Mapa mental</option><option>Presentación</option><option>Investigación</option><option>Práctica</option><option>Reflexión</option>
+    </select>
+  </label>
+</div>
+<label>Curso<input name="course" required placeholder="Nombre del curso"></label>
+    <label>Resumen<textarea name="summary" required maxlength="420" placeholder="Explica brevemente de qué trata..."></textarea></label>
+    <label>Documento PDF (Máx. 2MB) <input type="file" name="pdfDocument" accept="application/pdf" required></label>
+    <label>Etiquetas<input name="tags" placeholder="sistemas, investigación, UNSM"></label>
+    <button class="primary-action" type="submit">Agregar al blog</button>
+  </form>
+</dialog>
+  <script src="js/app.js" defer></script>
+</body></html>
