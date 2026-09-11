@@ -2,23 +2,26 @@ document.addEventListener('DOMContentLoaded', () => {
   const ADMIN_PASSWORD = '1234';
 
   // TRABAJOS PÚBLICOS POR DEFECTO
-  const INITIAL_POSTS = [
+const INITIAL_POSTS = [
     {
       title: "Percepción sobre la falta de impresoras de cortado laser y 3D en la FISI-UNSM-Perú",
       unit: "Unidad I",
       type: "MAPA MENTAL",
       course: "Teoría General de Sistemas",
       summary: "En el presente trabajo doy mi punto de vista sobre la falta de impresoras de cortado laser y 3D en la FISI.",
-      pdfUrl: "informe1.pdf", // Nombre exacto de tu PDF en GitHub
+      pdfUrl: "informe1.pdf",
       date: "10 SET. 2026"
+    },
+    {
+      title: "Análisis General del Sistema: Pollería",
+      unit: "Unidad I",
+      type: "INFORME",
+      course: "Teoría General de Sistemas",
+      summary: "Estudio de una pollería como sistema abierto bajo la TGS: entradas, procesos, salidas, subsistemas, entorno y retroalimentación.",
+      pdfUrl: "analisis_polleria.pdf", // Nombre exacto del PDF que subiste a GitHub
+      date: "11 SET. 2026"
     }
   ];
-
-  let posts = JSON.parse(localStorage.getItem('academic_posts'));
-  if (!posts || posts.length === 0) {
-    posts = INITIAL_POSTS;
-    localStorage.setItem('academic_posts', JSON.stringify(posts));
-  }
 
   const modal = document.getElementById('newPostDialog');
   const openBtn = document.getElementById('openModalBtn');
