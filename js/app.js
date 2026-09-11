@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const ADMIN_PASSWORD = '1234';
 
-  // 📌 TRABAJOS PUBLICOS POR DEFECTO (Visibles para todos los visitantes)
+  // 📌 LÍNEAS 4 - 16: TRABAJOS PÚBLICOS POR DEFECTO
   const INITIAL_POSTS = [
     {
       title: "Percepción sobre la falta de impresoras de cortado laser y 3D en la FISI-UNSM-Perú",
@@ -9,13 +9,13 @@ document.addEventListener('DOMContentLoaded', () => {
       type: "MAPA MENTAL",
       course: "Teoría General de Sistemas",
       summary: "En el presente trabajo doy mi punto de vista sobre la falta de impresoras de cortado laser y 3D en la FISI.",
-      pdfUrl: null, // Si deseas enlazar un PDF por defecto, pega aquí su data Base64
+      pdfUrl: "tarea sobre la percepción.pdf", // Nombre exacto del PDF que subiste a GitHub
       comments: [],
       date: "10 SET. 2026"
     }
   ];
 
-  // Cargar publicaciones del navegador o establecer las iniciales por defecto
+  // Cargar publicaciones del navegador o establecer las iniciales
   let posts = JSON.parse(localStorage.getItem('academic_posts'));
   if (!posts || posts.length === 0) {
     posts = INITIAL_POSTS;
@@ -43,6 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let currentFilter = 'Todos';
 
+  // 📌 LÍNEAS 43 - 75: FUNCIÓN PARA ABRIR PDFS (Locales de GitHub y Base64)
   window.openPdf = function(index) {
     const post = posts[index];
     if (!post || !post.pdfUrl) {
@@ -50,24 +51,25 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    // Abre el archivo PDF subido directamente a tu repositorio en GitHub
+    if (!post.pdfUrl.startsWith('data:')) {
+      window.open(post.pdfUrl, '_blank');
+      return;
+    }
+
+    // Abre el archivo procesado dinámicamente si proviene del navegador
     try {
-      const base64Data = post.pdfUrl;
-      const parts = base64Data.split(';base64,');
+      const parts = post.pdfUrl.split(';base64,');
       const contentType = parts[0].replace('data:', '') || 'application/pdf';
       const raw = window.atob(parts[1]);
-      const rawLength = raw.length;
-      const uInt8Array = new Uint8Array(rawLength);
-
-      for (let i = 0; i < rawLength; ++i) {
+      const uInt8Array = new Uint8Array(raw.length);
+      for (let i = 0; i < raw.length; ++i) {
         uInt8Array[i] = raw.charCodeAt(i);
       }
-
       const blob = new Blob([uInt8Array], { type: contentType });
-      const blobUrl = URL.createObjectURL(blob);
-      window.open(blobUrl, '_blank');
+      window.open(URL.createObjectURL(blob), '_blank');
     } catch (err) {
-      console.error("Error al abrir PDF:", err);
-      alert("Hubo un problema al procesar el archivo.");
+      alert("No se pudo procesar el archivo PDF.");
     }
   };
 
