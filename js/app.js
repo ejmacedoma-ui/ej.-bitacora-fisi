@@ -2,24 +2,36 @@ document.addEventListener('DOMContentLoaded', () => {
   const ADMIN_PASSWORD = '1234';
 
   // 📌 CADA TRABAJO TIENE UN ID ÚNICO PARA QUE GISCUS SEPA EN QUÉ HILO GUARDAR SUS COMENTARIOS
-   const INITIAL_POSTS = [
+  const INITIAL_POSTS = [
     {
+      id: "trabajo-percepcion-impresoras-3d",
       title: "Percepción sobre la falta de impresoras de cortado laser y 3D en la FISI-UNSM-Perú",
       unit: "Unidad I",
       type: "MAPA MENTAL",
       course: "Teoría General de Sistemas",
       summary: "En el presente trabajo doy mi punto de vista sobre la falta de impresoras de cortado laser y 3D en la FISI.",
-      pdfUrl: "tarea sobre la percepción.pdf", // Nombre del archivo PDF subido a GitHub
+      pdfUrl: "informe1.pdf",
       date: "10 SET. 2026"
     },
     {
+      id: "trabajo-analisis-sistema-polleria",
       title: "Análisis General del Sistema: Pollería",
       unit: "Unidad I",
       type: "INFORME",
       course: "Teoría General de Sistemas",
       summary: "Estudio de una pollería como sistema abierto bajo la TGS: entradas, procesos, salidas, subsistemas, entorno y retroalimentación.",
-      pdfUrl: "Análisis de Sistemas - Pollería.pdf", // Nombre del archivo PDF subido a GitHub
+      pdfUrl: "analisis_polleria.pdf",
       date: "11 SET. 2026"
+    },
+    {
+      id: "trabajo-tipos-clasificacion-sistemas",
+      title: "Tipos de Sistemas y su Clasificación: Aeropuerto Comercial y Central Hidroeléctrica",
+      unit: "Unidad I",
+      type: "INFORME",
+      course: "Teoría General de Sistemas",
+      summary: "Análisis y clasificación de un Aeropuerto Comercial y una Central Hidroeléctrica bajo los 6 criterios de la TGS, junto con su bucle de retroalimentación unida[cite: 2].",
+      pdfUrl: "informe_tipos_sistemas.pdf",
+      date: "18 SET. 2026"
     }
   ];
 
