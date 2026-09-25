@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
       date: "11 SET. 2026"
     },
     {
-      id: "trabajo-tipos-clasificacion-sistemas",
+      id: "informe-tipos-clasificacion-sistemas",
       title: "Tipos de Sistemas y su Clasificación: Aeropuerto Comercial y Central Hidroeléctrica",
       unit: "Unidad I",
       type: "INFORME",
