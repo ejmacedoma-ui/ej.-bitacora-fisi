@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const ADMIN_PASSWORD = '1234';
 
-  // 📌 CADA TRABAJO TIENE UN ID ÚNICO PARA QUE GISCUS SEPA EN QUÉ HILO GUARDAR SUS COMENTARIOS
+  // 📌 LISTA OFICIAL DE TRABAJOS PUBLICADOS
   const INITIAL_POSTS = [
     {
       id: "trabajo-percepcion-impresoras-3d",
@@ -24,13 +24,13 @@ document.addEventListener('DOMContentLoaded', () => {
       date: "11 SET. 2026"
     },
     {
-      id: "informe-tipos-clasificacion-sistemas",
+      id: "trabajo-tipos-clasificacion-sistemas",
       title: "Tipos de Sistemas y su Clasificación: Aeropuerto Comercial y Central Hidroeléctrica",
       unit: "Unidad I",
       type: "INFORME",
       course: "Teoría General de Sistemas",
-      summary: "Análisis y clasificación de un Aeropuerto Comercial y una Central Hidroeléctrica bajo los 6 criterios de la TGS, junto con su bucle de retroalimentación unida[cite: 2].",
-      pdfUrl: "informe_tipos_sistemas.pdf",
+      summary: "Análisis y clasificación de un Aeropuerto Comercial y una Central Hidroeléctrica bajo los 6 criterios de la TGS, junto con su bucle de retroalimentación unida.",
+      pdfUrl: "informe-tipos-clasificacion-sistemas.pdf", // Nombre exacto de tu archivo PDF
       date: "18 SET. 2026"
     }
   ];
@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // 📌 CARGA UN GISCUS INDEPENDIENTE PARA CADA TRABAJO USANDO SU ID ÚNICO
+  // BANDEJA INDEPENDIENTE DE GISCUS
   function loadGiscusComments(filteredPosts) {
     filteredPosts.forEach((post, index) => {
       const container = document.getElementById(`giscus-container-${index}`);
@@ -94,7 +94,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       container.innerHTML = ''; 
 
-      // Se asigna el ID único de la publicación como término de búsqueda
       const termIdentifier = post.id || post.title || `publicacion-${index}`;
 
       const iframe = document.createElement('iframe');
@@ -167,7 +166,6 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
           </div>
 
-          <!-- CONTENEDOR INDIVIDUAL DE COMENTARIOS -->
           <div class="comments-box" style="border-top: 1px solid #e0e0e0; padding-top: 10px; margin-top: 10px; background: #fafafa; border-radius: 8px; padding: 10px;">
             <div id="giscus-container-${index}"></div>
           </div>
@@ -178,7 +176,6 @@ document.addEventListener('DOMContentLoaded', () => {
     loadGiscusComments(filtered);
   }
 
-  // MODAL Y PUBLICACIONES NUEVAS
   if (openBtn && modal) {
     openBtn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -205,7 +202,6 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       const formData = new FormData(newPostForm);
 
-      // Genera automáticamente un ID único para los comentarios del nuevo trabajo
       const newPost = {
         id: "trabajo-" + Date.now(),
         title: formData.get('title') || 'Publicación',
