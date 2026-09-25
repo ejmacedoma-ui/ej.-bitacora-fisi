@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const ADMIN_PASSWORD = '1234';
 
-  // 📌 LISTA OFICIAL DE TRABAJOS PUBLICADOS
+  // 📌 LISTA CONFIGURADA CON LOS NOMBRES EXACTOS DE TU GITHUB
   const INITIAL_POSTS = [
     {
       id: "trabajo-percepcion-impresoras-3d",
@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
       date: "18 SET. 2026"
     }
   ];
+
   let posts = INITIAL_POSTS;
   localStorage.setItem('academic_posts', JSON.stringify(posts));
 
@@ -57,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let currentFilter = 'Todos';
 
-  // ABRIR PDF
+  // ABRIR PDF (encodeURI convierte automáticamente tildes y espacios para la web)
   window.openPdf = function(index) {
     const post = posts[index];
     if (!post || !post.pdfUrl) {
@@ -66,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (!post.pdfUrl.startsWith('data:')) {
-      window.open(post.pdfUrl, '_blank');
+      window.open(encodeURI(post.pdfUrl), '_blank');
       return;
     }
 
