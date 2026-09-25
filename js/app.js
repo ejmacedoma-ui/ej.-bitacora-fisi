@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
       type: "MAPA MENTAL",
       course: "Teoría General de Sistemas",
       summary: "En el presente trabajo doy mi punto de vista sobre la falta de impresoras de cortado laser y 3D en la FISI.",
-      pdfUrl: "informe1.pdf",
+      pdfUrl: "tarea sobre la percepción.pdf",
       date: "10 SET. 2026"
     },
     {
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
       type: "INFORME",
       course: "Teoría General de Sistemas",
       summary: "Estudio de una pollería como sistema abierto bajo la TGS: entradas, procesos, salidas, subsistemas, entorno y retroalimentación.",
-      pdfUrl: "analisis_polleria.pdf",
+      pdfUrl: "Análisis de Sistemas - Pollería.pdf",
       date: "11 SET. 2026"
     },
     {
@@ -30,11 +30,10 @@ document.addEventListener('DOMContentLoaded', () => {
       type: "INFORME",
       course: "Teoría General de Sistemas",
       summary: "Análisis y clasificación de un Aeropuerto Comercial y una Central Hidroeléctrica bajo los 6 criterios de la TGS, junto con su bucle de retroalimentación unida.",
-      pdfUrl: "informe-tipos-clasificacion-sistemas.pdf", // Nombre exacto de tu archivo PDF
+      pdfUrl: "informe-tipos-clasificacion-sistemas.pdf",
       date: "18 SET. 2026"
     }
   ];
-
   let posts = INITIAL_POSTS;
   localStorage.setItem('academic_posts', JSON.stringify(posts));
 
