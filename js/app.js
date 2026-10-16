@@ -1,22 +1,45 @@
 document.addEventListener('DOMContentLoaded', () => {
   const ADMIN_PASSWORD = '1234';
 
-  // 📌 LISTA CONFIGURADA CON LOS NOMBRES EXACTOS DE TU GITHUB
+  // 📌 PUBLICACIONES DIVIDIDAS STRICTAMENTE POR UNIDAD
   const INITIAL_POSTS = [
+    // ------------------- TRABAJOS DE LA UNIDAD II -------------------
     {
-      id: "trabajo-percepcion-impresoras-3d",
-      title: "Percepción sobre la falta de impresoras de cortado laser y 3D en la FISI-UNSM-Perú",
-      unit: "Unidad I",
-      type: "MAPA MENTAL",
+      id: "trabajo-cibernetica-tgs",
+      title: "Cibernética: Fundamentos, Casos Prácticos e Indicadores de Desviación",
+      unit: "Unidad II", // 👈 Asignado únicamente a Unidad II
+      type: "INFORME",
       course: "Teoría General de Sistemas",
-      summary: "En el presente trabajo doy mi punto de vista sobre la falta de impresoras de cortado laser y 3D en la FISI.",
-      pdfUrl: "tarea sobre la percepción.pdf",
-      date: "10 SET. 2026"
+      summary: "Análisis cibernético de cuatro casos prácticos (riego automático, semáforo inteligente, aire acondicionado e inventarios) con fichas técnicas, métricas de control y diagramas de bloques.",
+      pdfUrl: "Informe Semana 07 - Cibernética (TGS UNSM) .pdf",
+      date: "09 OCT. 2026"
+    },
+    {
+      id: "trabajo-sistema-transporte-urbano",
+      title: "Análisis Sistémico del Sistema de Transporte Urbano (STU)",
+      unit: "Unidad II", // 👈 Asignado únicamente a Unidad II
+      type: "INFORME",
+      course: "Teoría General de Sistemas",
+      summary: "Estudio del transporte urbano como sistema abierto y complejo mediante los 8 parámetros de la TGS, evaluando flujos de datos, energía, materia, entropía y homeostasis.",
+      pdfUrl: "TGS - Sistema de Transporte Urbano (UNSM).pdf",
+      date: "16 OCT. 2026"
+    },
+
+    // ------------------- TRABAJOS DE LA UNIDAD I -------------------
+    {
+      id: "trabajo-tipos-clasificacion-sistemas",
+      title: "Tipos de Sistemas y su Clasificación: Aeropuerto Comercial y Central Hidroeléctrica",
+      unit: "Unidad I", // 👈 Permanece en Unidad I
+      type: "INFORME",
+      course: "Teoría General de Sistemas",
+      summary: "Análisis y clasificación de un Aeropuerto Comercial y una Central Hidroeléctrica bajo los 6 criterios de la TGS, junto con su bucle de retroalimentación unida.",
+      pdfUrl: "informe-tipos-clasificacion-sistemas.pdf",
+      date: "18 SET. 2026"
     },
     {
       id: "trabajo-analisis-sistema-polleria",
       title: "Análisis General del Sistema: Pollería",
-      unit: "Unidad I",
+      unit: "Unidad I", // 👈 Permanece en Unidad I
       type: "INFORME",
       course: "Teoría General de Sistemas",
       summary: "Estudio de una pollería como sistema abierto bajo la TGS: entradas, procesos, salidas, subsistemas, entorno y retroalimentación.",
@@ -24,14 +47,14 @@ document.addEventListener('DOMContentLoaded', () => {
       date: "11 SET. 2026"
     },
     {
-      id: "trabajo-tipos-clasificacion-sistemas",
-      title: "Tipos de Sistemas y su Clasificación: Aeropuerto Comercial y Central Hidroeléctrica",
-      unit: "Unidad I",
-      type: "INFORME",
+      id: "trabajo-percepcion-impresoras-3d",
+      title: "Percepción sobre la falta de impresoras de cortado laser y 3D en la FISI-UNSM-Perú",
+      unit: "Unidad I", // 👈 Permanece en Unidad I
+      type: "MAPA MENTAL",
       course: "Teoría General de Sistemas",
-      summary: "Análisis y clasificación de un Aeropuerto Comercial y una Central Hidroeléctrica bajo los 6 criterios de la TGS, junto con su bucle de retroalimentación unida.",
-      pdfUrl: "informe-tipos-clasificacion-sistemas.pdf",
-      date: "18 SET. 2026"
+      summary: "En el presente trabajo doy mi punto de vista sobre la falta de impresoras de cortado laser y 3D en la FISI.",
+      pdfUrl: "tarea sobre la percepción.pdf",
+      date: "10 SET. 2026"
     }
   ];
 
@@ -48,17 +71,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // Normalización para que la búsqueda por filtros funcione de forma exacta
   const normalize = str => {
     if (!str) return '';
     return str.toLowerCase()
       .replace(/[\s\-_]/g, '')
       .replace('unidad1', 'unidadi')
-      .replace('1', 'i');
+      .replace('unidad2', 'unidadii')
+      .replace('1', 'i')
+      .replace('2', 'ii');
   };
 
   let currentFilter = 'Todos';
 
-  // ABRIR PDF (encodeURI convierte automáticamente tildes y espacios para la web)
+  // Abrir PDF
   window.openPdf = function(index) {
     const post = posts[index];
     if (!post || !post.pdfUrl) {
@@ -86,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // BANDEJA INDEPENDIENTE DE GISCUS
+  // Carga de Giscus para comentarios individuales
   function loadGiscusComments(filteredPosts) {
     filteredPosts.forEach((post, index) => {
       const container = document.getElementById(`giscus-container-${index}`);
@@ -124,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // RENDERIZAR TARJETAS EN PANTALLA
+  // Filtrado y renderizado
   function renderPosts(filterCategory = currentFilter) {
     currentFilter = filterCategory;
     const container = document.getElementById('postsGrid');
@@ -205,7 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const newPost = {
         id: "trabajo-" + Date.now(),
         title: formData.get('title') || 'Publicación',
-        unit: formData.get('unit') || 'Unidad I',
+        unit: formData.get('unit') || 'Unidad II',
         type: formData.get('type') || 'Informe',
         course: formData.get('course') || '',
         summary: formData.get('summary') || '',
