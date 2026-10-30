@@ -1,35 +1,45 @@
 document.addEventListener('DOMContentLoaded', () => {
   const ADMIN_PASSWORD = '1234';
 
-  // 📌 PUBLICACIONES DIVIDIDAS STRICTAMENTE POR UNIDAD
+  // 📌 LISTA OFICIAL DE TRABAJOS (UNIDAD I Y UNIDAD II)
   const INITIAL_POSTS = [
     // ------------------- TRABAJOS DE LA UNIDAD II -------------------
     {
-      id: "trabajo-cibernetica-tgs",
-      title: "Cibernética: Fundamentos, Casos Prácticos e Indicadores de Desviación",
-      unit: "Unidad II", // 👈 Asignado únicamente a Unidad II
+      id: "trabajo-paradigma-cartesiano-sistemico",
+      title: "Aplicabilidad del Paradigma Cartesiano-Sistémico en el Diagnóstico de un Portal de Matrícula",
+      unit: "Unidad II",
       type: "INFORME",
       course: "Teoría General de Sistemas",
-      summary: "Análisis cibernético de cuatro casos prácticos (riego automático, semáforo inteligente, aire acondicionado e inventarios) con fichas técnicas, métricas de control y diagramas de bloques.",
-      pdfUrl: "Informe Semana 07 - Cibernética (TGS UNSM) .pdf",
-      date: "09 OCT. 2026"
+      summary: "Diagnóstico de un portal de matrícula aplicando las cuatro reglas del método cartesiano y su integración con la TGS (interrelación, entorno y retroalimentación) para resolver cuellos de botella y propiedades emergentes.",
+      pdfUrl: "informe-paradigma-cartesiano-sistemico.pdf",
+      date: "23 OCT. 2026"
     },
     {
       id: "trabajo-sistema-transporte-urbano",
       title: "Análisis Sistémico del Sistema de Transporte Urbano (STU)",
-      unit: "Unidad II", // 👈 Asignado únicamente a Unidad II
+      unit: "Unidad II",
       type: "INFORME",
       course: "Teoría General de Sistemas",
       summary: "Estudio del transporte urbano como sistema abierto y complejo mediante los 8 parámetros de la TGS, evaluando flujos de datos, energía, materia, entropía y homeostasis.",
       pdfUrl: "TGS - Sistema de Transporte Urbano (UNSM).pdf",
       date: "16 OCT. 2026"
     },
+    {
+      id: "trabajo-cibernetica-tgs",
+      title: "Cibernética: Fundamentos, Casos Prácticos e Indicadores de Desviación",
+      unit: "Unidad II",
+      type: "INFORME",
+      course: "Teoría General de Sistemas",
+      summary: "Análisis cibernético de cuatro casos prácticos (riego automático, semáforo inteligente, aire acondicionado e inventarios) con fichas técnicas, métricas de control y diagramas de bloques.",
+      pdfUrl: "Informe Semana 07 - Cibernética (TGS UNSM) .pdf",
+      date: "09 OCT. 2026"
+    },
 
     // ------------------- TRABAJOS DE LA UNIDAD I -------------------
     {
       id: "trabajo-tipos-clasificacion-sistemas",
       title: "Tipos de Sistemas y su Clasificación: Aeropuerto Comercial y Central Hidroeléctrica",
-      unit: "Unidad I", // 👈 Permanece en Unidad I
+      unit: "Unidad I",
       type: "INFORME",
       course: "Teoría General de Sistemas",
       summary: "Análisis y clasificación de un Aeropuerto Comercial y una Central Hidroeléctrica bajo los 6 criterios de la TGS, junto con su bucle de retroalimentación unida.",
@@ -39,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
     {
       id: "trabajo-analisis-sistema-polleria",
       title: "Análisis General del Sistema: Pollería",
-      unit: "Unidad I", // 👈 Permanece en Unidad I
+      unit: "Unidad I",
       type: "INFORME",
       course: "Teoría General de Sistemas",
       summary: "Estudio de una pollería como sistema abierto bajo la TGS: entradas, procesos, salidas, subsistemas, entorno y retroalimentación.",
@@ -49,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     {
       id: "trabajo-percepcion-impresoras-3d",
       title: "Percepción sobre la falta de impresoras de cortado laser y 3D en la FISI-UNSM-Perú",
-      unit: "Unidad I", // 👈 Permanece en Unidad I
+      unit: "Unidad I",
       type: "MAPA MENTAL",
       course: "Teoría General de Sistemas",
       summary: "En el presente trabajo doy mi punto de vista sobre la falta de impresoras de cortado laser y 3D en la FISI.",
@@ -71,7 +81,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Normalización para que la búsqueda por filtros funcione de forma exacta
   const normalize = str => {
     if (!str) return '';
     return str.toLowerCase()
@@ -84,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let currentFilter = 'Todos';
 
-  // Abrir PDF
+  // ABRIR PDF
   window.openPdf = function(index) {
     const post = posts[index];
     if (!post || !post.pdfUrl) {
@@ -112,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // Carga de Giscus para comentarios individuales
+  // CARGA DE COMENTARIOS INDEPENDIENTES (GISCUS)
   function loadGiscusComments(filteredPosts) {
     filteredPosts.forEach((post, index) => {
       const container = document.getElementById(`giscus-container-${index}`);
@@ -150,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Filtrado y renderizado
+  // RENDERIZADO DE TARJETAS
   function renderPosts(filterCategory = currentFilter) {
     currentFilter = filterCategory;
     const container = document.getElementById('postsGrid');
